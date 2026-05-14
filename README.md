@@ -1,74 +1,59 @@
+🚀 ESP32 Remote ADC Monitor
 
-ESP-SCOPE
+This project turns an ESP32 into a high-performance analog signal monitor, accessible via a real-time web interface. Utilizing WebSockets, ADC data is streamed instantly to your browser, allowing for fluid data visualization without page refreshes.
+📝 Description
 
-- separer l html en sous-fichier
-- rajoute un cadrigage qui correspond aux division, et les buttons des division scale/div doivent eagelemtn udpate le graph
+The system reads analog values from the ESP32 ADC pins (dynamically configured via the web UI) and broadcasts them as formatted data frames. The integrated web interface allows users to select which GPIOs to monitor on the fly.
 
-- dans general, ajoute un slider horizontal pour deplacer le point de trigger
-- si trigger, affiche une ligne vertical estompé
-- reduit la largeur moyenne des channels
-- bouger les slides doit update toute la courbe, pas jsute les nouveaux points
+Key Features:
 
+    Backend: High-speed WebSocket server running on ESP32 for ultra-low latency.
+    Frontend: Lightweight HTML5/JavaScript interface with optimized string parsing.
+    Flexibility: Dynamic pin configuration supporting the GPIO_XX; protocol.
 
+🖥️ Demo
 
+    [!IMPORTANT]
+    Live Demo coming soon!
 
+    ![Project Screenshot](Screenshot.png)
 
-a rajouter:
+🛠️ Quick Start
 
-les interface message entre ino-core et la page web.
+    Hardware: An ESP32 (DevKit V1, Olimex, or Wemos S2 Mini).
 
-les messages:
-la page web doit renvoyer vers ino les config message suivant:
+    Software:
 
-- ajout/retrait d un canal de mesure:
- add;GPIO10;
- del;GPIO10;
-    fait moi la fonction de config du ino egalement
+        Install dependencies: WebSocketsServer library.
+        Upload the code using VS Code + PlatformIO.
+        
+    Connection: Connect to the IP address displayed in the Serial Monitor (e.g., 192.168.1.50) or on your router interface.
 
+📋 Project Roadmap
+✅ Done
 
-- la page web dois recevoir les mesure du ino:
-data;timestamp;value-ch1-brute;value-ch2-brute;etc...
- fait moi egalement la loop de  mesure et d envoi de ces valeurs
+    [x] Hotspot or WLAN connexion available
+    [x] Initialized WebSocket server on Port 81.
+    [x] ADC pin reading implementation 
+    [x] Dynamic GPIOXX; string splitting and pin mapping system.
+    [x] Formatted data broadcasting: ADC;value;0;0;0.
 
+⏳ To-Do
 
+    [ ] Sending mix measurements
+    [ ] X scaling should work
+    [ ] Dynamic timebase should work
+    [ ] y scale should be 0 4095 fix for now
+    [ ] Y channel offset should display the origin and a y correponding legend
+    [ ] Y Trigger should work
+    [ ] coockie configuration
 
+🔧 Tech Stack
 
+    C++ / Arduino: Embedded logic and hardware control.
+    JavaScript (ES6): DOM manipulation and WebSocket management.
+    HTML5 / CSS3: Responsive user interface.
 
-
-
-
-- prepare gpio pour les 3 cibles (une match table pour chaque cibles)et update les checkbox en focntion
-
-- interfacer la reception depuis le ino
-
-- le changement de io doit etre appliqué sur le ino
-
-
-
-
-
-
-
-
-- peut etre ajouter une possibilité de mesuré le courant utilisé sur une longue periode (unité: V, W, A)
-- peut etre ajouter une possibilité de convertir la valeur arrivé avant display 
-
-- ajouter un champs qui affiche l echantillonage
-
-- remember settings (coockies)
-
-
-
-
-
-- les données sont recu par la page sous la forme suivante:
-ADC;timestamp;adc_value1;adc_value2
-il est possible de recevoir d un coup plusieurs chaine de ce type separé par \n
-
-Le graph doit reagir en ajoutant les valeurs a chaque courbe correspondante.
-le timestamp doit egalement etre utilisé pour positioné le point.
-
-Pour l instant affiche les valeurs brutes mais prevoit de convertir les valeurs a reception avec une fonction "convert() qui pour l instant renverront in = out
-
+Built with ☕ and extensive debugging in VS Code.
 
 

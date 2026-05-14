@@ -7,6 +7,10 @@ const H_DIV    = 10;        // horizontal divisions
 const V_DIV    = 8;         // vertical divisions
 const V_RANGE  = 2048;      // Y axis half-range (ADC units, ±)
 const DISP_PTS = 800;       // samples in the rolling window
+const V_MIN = 0;
+const V_MAX = 4095;
+
+let lastSampleTime = 0;
 
 const YSCALE_LABELS = ['100mV', '500mV', '1V', '2V'];
 // Multiplier applied at read time: smaller scale = larger display amplitude
@@ -82,23 +86,27 @@ function readRing(ch) {
   */
 let simT = 0;
 
-function simSample(ch, t) {
+function simSample(ch, t) 
+{
   const w   = CH_WAVES[ch];
   const amp = w.amp + w.ampVar * Math.sin(2 * Math.PI * w.varFreq * t + w.phase);
   return amp * Math.sin(2 * Math.PI * w.freq * t) + (Math.random() - 0.5) * 38;
 }
 
-function advanceSim(elapsedSec) {
+function advanceSim(elapsedSec) 
+{
   // Compute how many samples we need to push based on the current effective SPS
   const sps = DISP_PTS / (totalMs() / 1000);
   const n   = Math.max(1, Math.round(sps * elapsedSec));
   const dt  = elapsedSec / n;
 
-  for (let k = 0; k < n; k++) {
+  for (let k = 0; k < n; k++)
+  {
     simT += dt;
-    for (let ch = 1; ch <= 4; ch++) {
+    for (let ch = 1; ch <= 4; ch++)
+    {
       if (!state[ch].visible) continue;
-      ring[ch][wHead[ch]] = simSample(ch, simT);
+      ring[ch][wHead[ch]] = 1;//simSample(ch, simT);
       wHead[ch] = (wHead[ch] + 1) % DISP_PTS;
     }
   }
@@ -227,17 +235,17 @@ const chart = new Chart(chartCtx, {
         },
       },
       y: {
-        min:    -V_RANGE,
-        max:     V_RANGE,
+        min: V_MIN,
+        max: V_MAX,
         grid:   { display: false },
         border: { display: false },
         ticks: {
-          color:    '#2a3e56',
-          font:     { family: "'Share Tech Mono', monospace", size: 9 },
-          stepSize: (V_RANGE * 2) / V_DIV,  // 512 → 8 equal divisions
-          callback: v => v === 0 ? '0' : v,
+          color: '#2a3e56',
+          font:  { family: "'Share Tech Mono', monospace", size: 9 },
+          stepSize: (V_MAX - V_MIN) / V_DIV,
+          callback: v => v,
         },
-      }
+      },
     }
   }
 });
@@ -361,13 +369,13 @@ function buildPanel(id) {
 
     <div class="ch-field">
       <div class="ch-label">GPIO</div>
-      <select class="ch-sel">
-        <option>GPI36</option><option>GPI36</option>
-        <option>GPI39</option><option>GPI39</option>
-        <option>GPIO32</option><option>GPIO32</option>
-        <option>GPIO33</option><option>GPIO33</option>
-        <option>GPI34</option><option>GPI34</option>
-        <option>GPI35</option><option>GPI35</option>
+      <select class="ch-sel" onChange="callConfigChannel()">
+        <option>GPI36</option>
+        <option>GPI39</option>
+        <option>GPIO32</option>
+        <option>GPIO33</option>
+        <option>GPI34</option>
+        <option>GPI35</option>
       </select>
     </div>
 
@@ -433,31 +441,18 @@ function getVisibleChannelGPIOs()
     let txt = "";
     for (let i = 1; i <= 4; i++)
     {
-        const channel =
-            document.getElementById(`ch${i}`);
-
-        //
-        // Skip hidden channels
-        //
+        const channel =  document.getElementById(`ch${i}`);
 
         if (!channel || channel.style.display === "none")
             continue;
 
-        //
-        // Get GPIO select value
-        //
-
-        const gpio =
-            channel
+        const gpio = channel
                 .querySelector(".ch-sel")
                 ?.value;
-
-         
         txt += gpio + ";";    
     }
 
     console.log("config: " + txt);
-
     return txt.replaceAll(" ", "_");;
 }
 
@@ -466,12 +461,15 @@ function getVisibleChannelGPIOs()
 ═══════════════════════════════════════════════════ */
 function setChannelCount(n) {
     renderChannels(n);
+    callConfigChannel();
+}
 
-    fetch(`/api/cmd/config/${getVisibleChannelGPIOs()}`)
-        .then(response => response.text())
-        .then(data =>        {  console.log("ESP32 response:", data);    })
-        .catch(err =>        {  console.error("API error:", err);        });
-
+function callConfigChannel()
+{
+  fetch(`/api/cmd/config/${getVisibleChannelGPIOs()}`)
+      .then(response => response.text())
+      .then(data =>        {  console.log("ESP32 response:", data);    })
+      .catch(err =>        {  console.error("API error:", err);        });
 }
 
 function setTimebase(ms) {
@@ -579,7 +577,8 @@ function frame(ts) {
   if (!running) return;
   const elapsed = lastTs !== null ? (ts - lastTs) / 1000 : 0.016;
   lastTs = ts;
-  advanceSim(Math.min(elapsed, 0.12));  // cap at 120ms to avoid huge jumps on tab restore
+  // advanceSim(Math.min(elapsed, 0.12));  // cap at 120ms to avoid huge jumps on tab restore
+
   updateChart();
   rafId = requestAnimationFrame(frame);
 }
@@ -595,22 +594,39 @@ startScope();
 
 
 
-const socket   = new WebSocket('ws://192.168.4.1:81'); 
+const socket   = new WebSocket( `ws://${window.location.hostname}:81`); 
 socket.onopen  = function(e) {  console.log("[open] Connexion opened");};
 socket.onerror = function(error) {  console.log(`[error] ${error.message}`);};
 
-
-socket.onmessage = function(event) 
+socket.onmessage = function(event)
 {
-  //payload example : "ADC;181346;0;0;0"
-  console.log("Message received :", event.data);
+    if (!event.data.startsWith("ADC"))
+        return;
 
+    const p  = event.data.split(';');
+    const ts = parseInt(p[1]) || 0;
 
+    if (lastSampleTime)
+    {
+        const totalMs = ((ts - lastSampleTime) * DISP_PTS) / 1000;
 
+        chart.options.scales.x.max = totalMs;
 
-  // Si tu veux manipuler les données (split)
-  if (event.data.startsWith("ADC")) {
-      const parts = event.data.split(';');
-      console.log("Valeur ADC :", parts[1]); // Affiche 181346
-  }
+        const dt = totalMs / DISP_PTS;
+
+        for (let i = 0; i < DISP_PTS; i++)
+            xLUT[i] = i * dt;
+    }
+
+    lastSampleTime = ts;
+
+    for (let ch = 1; ch <= 4; ch++)
+    {
+        if (!state[ch].visible)
+            continue;
+
+        ring[ch][wHead[ch]] =       parseInt(p[ch + 1]) || 0;
+
+        wHead[ch] =   (wHead[ch] + 1) % DISP_PTS;
+    }
 };

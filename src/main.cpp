@@ -10,8 +10,10 @@
 #include "web/generated/chartPlugin_js.h"
 
 
-const char *ssid = "ESP32-SCOPE";
-const char *password = "12345678";
+bool hotspot = false; 
+const char *hotspot_ssid = "ESP32-SCOPE";
+const char *hotspot_password = "12345678";
+
 
 
 IPAddress apIP(192, 168, 4, 1);
@@ -119,7 +121,7 @@ int getGpioFromName(String name) {
     for (const auto& item : adcTable) {
         if (strcmp(item.name, buf) == 0) return item.pin;
     }
-    return -1; // Non trouvé
+    return -1; 
 }
 
 
@@ -196,9 +198,19 @@ void setup()
 {
     sleep(1);
     Serial.begin(9600);
-    WiFi.mode(WIFI_AP);
-    WiFi.softAP(ssid, password);
-    Serial.println(WiFi.softAPIP());
+    if(hotspot)
+    {
+        WiFi.mode(WIFI_AP);
+        WiFi.softAP(hotspot_ssid, hotspot_password);
+        Serial.println(WiFi.softAPIP());
+    }
+    else
+    {
+        WiFi.mode(WIFI_STA);
+        WiFi.begin(WIFI_SSID, WIFI_PASS);
+
+        Serial.println(WiFi.localIP()); 
+    }
 
     // HTTP routes
     server.on("/",               handleRoot);
@@ -224,14 +236,10 @@ void loop()
 
     static uint32_t last = 0;
 
-    if (millis() - last > 1000)
+    if (millis() - last > 100)
     {
-        last = millis();
+      last = millis();
 
-        // int value = random(1, 6); // 1 to 5
-        // String msg = String(value);
-        // ws.broadcastTXT(msg);
-        // Serial.println("Sent: " + msg);
 
 
       String payload = "ADC;" + String(millis());
