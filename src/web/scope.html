@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 Scope</title>
+<link rel='stylesheet' href='scope.css'></head>
+<body>
+
+<div class="app">
+
+  <!-- ═══ GRAPH (left) ═══════════════════════════════════════════ -->
+  <div class="left">
+    <div class="graph-panel panel">
+      <canvas id="scopeChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ═══ CONTROLS (right) ══════════════════════════════════════ -->
+  <div class="right">
+
+    <!-- Toolbar -->
+    <div class="toolbar panel">
+
+      <span class="tb-label">CH</span>
+      <select class="tb-sel" id="channelCount" onchange="setChannelCount(+this.value)">
+        <option>1</option><option>2</option><option>3</option><option value="4" selected>4</option>
+      </select>
+
+      <div class="tb-sep"></div>
+      <span class="tb-label">Type</span>
+      <select class="tb-sel">
+        <option>None</option><option>D1 Mini</option><option>VROOM</option>
+      </select>
+
+      <div class="tb-sep"></div>
+      <span class="tb-label">Timebase</span>
+      <select class="tb-sel" id="timebaseSel" onchange="setTimebase(+this.value)">
+        <option value="20">20ms/div</option>
+        <option value="50">50ms/div</option>
+        <option value="100" selected>100ms/div</option>
+        <option value="200">200ms/div</option>
+        <option value="500">500ms/div</option>
+        <option value="1000">1s/div</option>
+      </select>
+
+      <div class="tb-sep"></div>
+      <span class="tb-label">Trig Mode</span>
+      <select class="tb-sel">
+        <option>AUTO</option><option>NORMAL</option><option>SINGLE</option>
+      </select>
+
+      <div class="tb-sep"></div>
+      <span class="tb-label">Trig Pos</span>
+      <input type="range" class="tb-range" id="trigPosSlider"
+             min="0" max="100" value="10" step="1"
+             oninput="setTrigPos(+this.value)">
+      <span class="tb-mono" id="trigPosVal">100ms</span>
+
+      <div class="spacer"></div>
+      <button class="btn-run" id="btnStart" onclick="startScope()">▶ START</button>
+      <button class="btn-stop" onclick="stopScope()">■ STOP</button>
+
+    </div>
+
+    <!-- Channel panels -->
+    <div class="channels" id="channels"></div>
+
+  </div>
+</div>
+
+<script src="chart.js"></script>
+<script src="chartPlugin.js"></script>
+<script src='scope.js'></script>
+</body>
+</html>
