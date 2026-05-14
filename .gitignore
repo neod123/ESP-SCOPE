@@ -1,4 +1,4 @@
 .pio
 .vscode
-.env
+src/env.h
 src/web/generated/*

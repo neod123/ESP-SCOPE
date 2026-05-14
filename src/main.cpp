@@ -15,6 +15,11 @@ const char *hotspot_ssid = "ESP32-SCOPE";
 const char *hotspot_password = "12345678";
 
 
+#include "env.h" // should contains credentials as following
+//const char *router_ssid = "SSID";
+//const char *router_password = "PASSWORD";
+
+
 
 IPAddress apIP(192, 168, 4, 1);
 WebServer server(80);
@@ -207,7 +212,7 @@ void setup()
     else
     {
         WiFi.mode(WIFI_STA);
-        WiFi.begin(WIFI_SSID, WIFI_PASS);
+        WiFi.begin(router_ssid, router_password);
 
         Serial.println(WiFi.localIP()); 
     }
