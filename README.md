@@ -1,6 +1,12 @@
 # 🚀 Web based ESP32 oscilloscope
 
 This project turns an ESP32 into a high-performance analog signal monitor, accessible via a real-time web interface. Utilizing WebSockets, ADC data is streamed instantly to your browser, allowing for fluid data visualization without page refreshes.
+
+[Live demo available here](https://neod123.github.io/ESP-SCOPE/)
+
+![Project Screenshot](Screenshot.png)
+
+
 ## 📝 Description
 
 The system reads analog values from the ESP32 ADC pins (dynamically configured via the web UI) and broadcasts them as formatted data frames. The integrated web interface allows users to select which GPIOs to monitor on the fly.
@@ -11,11 +17,6 @@ Backend: High-speed WebSocket server running on ESP32 for ultra-low latency.
 Frontend: Lightweight HTML5/JavaScript interface with optimized string parsing.
 Flexibility: Dynamic pin configuration supporting the GPIO_XX; protocol.
 
-## 🖥️ Demo
-
-[Live demo available here](https://neod123.github.io/ESP-SCOPE/)
-
-![Project Screenshot](Screenshot.png)
 
 ## 🛠️ Quick Start
 
