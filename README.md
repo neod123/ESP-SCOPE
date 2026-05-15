@@ -13,8 +13,7 @@ Flexibility: Dynamic pin configuration supporting the GPIO_XX; protocol.
 
 ## 🖥️ Demo
 
-[!IMPORTANT]
-Live Demo coming soon!
+[Live demo available here](https://neod123.github.io/ESP-SCOPE/)
 
 ![Project Screenshot](Screenshot.png)
 
