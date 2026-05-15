@@ -40,14 +40,15 @@ Connection: Connect to the IP address displayed in the Serial Monitor (e.g., 192
 - [x] Sending mix measurements
 - [x] X scaling should work
 - [x] Y channel offset should display the origin and a y correponding legend
+- [x] Dynamic timebase should work
+- [x] Y Trigger should work
+- [x] start measure on page connexion
+- [x] sampling change
 
 ### ⏳ To-Do
 
-- [ ] Dynamic timebase should work
-- [ ] Y Trigger should work
 - [ ] coockie configuration
-- [ ] start measure on page connexion
-- [ ] sampling change
+- [ ] y trigger is not working well good
 
 ## 🔧 Tech Stack
 
