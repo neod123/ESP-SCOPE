@@ -29,7 +29,7 @@ body {
 ═══════════════════════════════════════════════════ */
 .app {
   display: grid;
-  grid-template-columns: 1fr 820px;
+  grid-template-columns: 1fr auto;
   height: 100vh;
   gap: 8px;
   padding: 8px;
@@ -78,11 +78,16 @@ canvas {
    TOOLBAR
 ═══════════════════════════════════════════════════ */
 .toolbar {
-  padding: 7px 12px;
+  padding: 5px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tb-row {
   display: flex;
   align-items: center;
   gap: 5px;
-  flex-wrap: nowrap;
 }
 
 .tb-label {
@@ -123,7 +128,6 @@ select.tb-sel {
 }
 select.tb-sel:focus { outline: none; border-color: var(--accent); }
 
-/* Trigger position slider */
 .tb-range {
   width: 72px;
   cursor: pointer;
@@ -160,6 +164,11 @@ select.tb-sel:focus { outline: none; border-color: var(--accent); }
   background: rgba(0, 221, 160, 0.1);
   color: var(--accent);
   border-color: var(--accent);
+}
+.btn-run.armed {
+  background: rgba(255, 176, 32, 0.12);
+  color: #ffb020;
+  border-color: #ffb020;
 }
 
 .btn-stop {
@@ -255,10 +264,10 @@ select.ch-sel {
   border-radius: 4px;
   color: var(--text);
   font-family: 'Rajdhani', sans-serif;
-  font-size: .74rem;
+  font-size: .66rem;
   font-weight: 600;
-  height: 23px;
-  padding: 0 16px 0 5px;
+  height: 19px;
+  padding: 0 14px 0 4px;
   width: 100%;
   -webkit-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%233a5068'/%3E%3C/svg%3E");
@@ -271,12 +280,85 @@ select.ch-sel:focus { outline: none; border-color: var(--accent); }
 select.ch-sel:disabled { opacity: .25; cursor: default; }
 
 /* ═══════════════════════════════════════════════════
+   CHANNEL BODY  — left col (formula+offset) + right col (trigger)
+═══════════════════════════════════════════════════ */
+.ch-body {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.ch-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.formula-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.unit-row { margin-top: 1px; }
+
+.unit-input {
+  text-align: left;
+  flex: 0.35;
+}
+
+/* ═══════════════════════════════════════════════════
+   FORMULA ROW  (ax + b)
+═══════════════════════════════════════════════════ */
+.formula-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.formula-input {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--accent);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .60rem;
+  width: 0;
+  flex: 1;
+  padding: 1px 3px;
+  height: 18px;
+  -moz-appearance: textfield;
+  text-align: center;
+  transition: border-color .15s;
+}
+.formula-input::-webkit-inner-spin-button,
+.formula-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.formula-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #0a1018;
+}
+
+.formula-sep {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .62rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════
    SLIDER COLUMNS (Y Scale + Offset)
 ═══════════════════════════════════════════════════ */
 .sliders-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5px;
+  display: flex;
+  justify-content: center;
   flex: 1;
   min-height: 0;
 }
@@ -289,32 +371,7 @@ select.ch-sel:disabled { opacity: .25; cursor: default; }
   min-height: 0;
 }
 
-/* Y scale: ticks left + slider */
-.yscale-wrap {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  gap: 3px;
-  flex: 1;
-  min-height: 0;
-  justify-content: center;
-  width: 100%;
-}
 
-.yscale-ticks {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 4px 0;
-}
-.yscale-ticks span {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: .56rem;
-  color: var(--text-dim);
-  line-height: 1;
-}
-
-/* Vertical range input */
 input[type="range"].vslider {
   writing-mode: vertical-lr;
   direction: rtl;
@@ -341,23 +398,48 @@ input[type="range"].vslider:disabled {
 }
 
 /* ═══════════════════════════════════════════════════
-   TRIGGER SECTION
+   TRIGGER SECTION  — right column of ch-body
 ═══════════════════════════════════════════════════ */
 .trigger-section {
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: 5px;
-  padding: 6px;
+  padding: 5px 4px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 52px;
+  flex-shrink: 0;
+}
+
+.trig-edge-row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.trig-check {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: .70rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  user-select: none;
+}
+
+.trig-check input[type="checkbox"] {
+  width: 11px;
+  height: 11px;
+  accent-color: var(--accent);
+  cursor: pointer;
   flex-shrink: 0;
 }
 
 .trigger-body {
   display: flex;
-  gap: 6px;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 55px;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
 }

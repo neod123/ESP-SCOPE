@@ -22,37 +22,51 @@
     <!-- Toolbar -->
     <div class="toolbar panel">
 
-      <span class="tb-label">CH</span>
-      <select class="tb-sel" id="channelCount" onchange="setChannelCount(+this.value)">
-        <option>1</option><option>2</option><option>3</option><option value="4" selected>4</option>
-      </select>
+      <!-- Row 1 — General -->
+      <div class="tb-row">
+        <span class="tb-label">CH</span>
+        <select class="tb-sel" id="channelCount" onchange="setChannelCount(+this.value)">
+          <option selected>1</option><option>2</option><option>3</option><option value="4">4</option>
+        </select>
 
-      <div class="tb-sep"></div>
-      <span class="tb-label">Type</span>
-      <select class="tb-sel">
-        <option>None</option><option>D1 Mini</option><option>VROOM</option>
-      </select>
+        <div class="tb-sep"></div>
+        <span class="tb-label">Sample Rate</span>
+        <select class="tb-sel" onchange="setSamplingRate(+this.value)">
+          <option value="0">Max</option>
+          <option value="500">2kHz</option>
+          <option value="1000">1kHz</option>
+          <option value="2000">500Hz</option>
+          <option value="5000">200Hz</option>
+          <option value="10000">100Hz</option>
+          <option value="50000">20Hz</option>
+        </select>
 
-      <div class="tb-sep"></div>
-      <span class="tb-label">Timebase</span>
-      <select class="tb-sel" id="timebaseSel" onchange="setTimebase(+this.value)">
-        <option value="20">20ms/div</option>
-        <option value="50">50ms/div</option>
-        <option value="100" selected>100ms/div</option>
-        <option value="200">200ms/div</option>
-        <option value="500">500ms/div</option>
-        <option value="1000">1s/div</option>
-      </select>
-      <div class="tb-sep"></div>
-      <span class="tb-label">Trig Pos</span>
-      <input type="range" class="tb-range" id="trigPosSlider"
-             min="0" max="100" value="10" step="1"
-             oninput="setTrigPos(+this.value)">
-      <span class="tb-mono" id="trigPosVal">100ms</span>
+        <div class="tb-sep"></div>
+        <span class="tb-label">Timebase</span>
+        <select class="tb-sel" id="timebaseSel" onchange="setTimebase(+this.value)">
+          <option value="20">20ms/div</option>
+          <option value="50">50ms/div</option>
+          <option value="100" selected>100ms/div</option>
+          <option value="200">200ms/div</option>
+          <option value="500">500ms/div</option>
+          <option value="1000">1s/div</option>
+          <option value="2000">2s/div</option>
+          <option value="5000">5s/div</option>
+        </select>
+      </div>
 
-      <div class="spacer"></div>
-      <button class="btn-run" id="btnStart" onclick="startScope()">▶ START</button>
-      <button class="btn-stop" onclick="stopScope()">■ STOP</button>
+      <!-- Row 2 — Trigger + Run -->
+      <div class="tb-row">
+        <span class="tb-label">Trig Delay</span>
+        <input type="range" class="tb-range" id="trigPosSlider"
+               min="0" max="100" value="100" step="1"
+               oninput="setTrigPos(100 - +this.value)">
+        <span class="tb-mono" id="trigPosVal">0ms</span>
+
+        <div class="spacer"></div>
+        <button class="btn-run" id="btnStart" onclick="startScope()">▶ START</button>
+        <button class="btn-stop" onclick="stopScope()">■ STOP</button>
+      </div>
 
     </div>
 

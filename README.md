@@ -26,7 +26,7 @@ Key Features:
 
         Install dependencies: WebSocketsServer library.
         Upload the code using VS Code + PlatformIO.
-        
+
     Connection: Connect to the IP address displayed in the Serial Monitor (e.g., 192.168.1.50) or on your router interface.
 
 📋 Project Roadmap
@@ -37,17 +37,19 @@ Key Features:
     [x] ADC pin reading implementation 
     [x] Dynamic GPIOXX; string splitting and pin mapping system.
     [x] Formatted data broadcasting: ADC;value;0;0;0.
+    [x] y scale should be 0 4095 fix for now
+    [x] Sending mix measurements
+    [x] X scaling should work
+    [x] Y channel offset should display the origin and a y correponding legend
 
 ⏳ To-Do
 
-    [ ] Sending mix measurements
-    [ ] X scaling should work
     [ ] Dynamic timebase should work
-    [ ] y scale should be 0 4095 fix for now
-    [ ] Y channel offset should display the origin and a y correponding legend
     [ ] Y Trigger should work
     [ ] coockie configuration
-
+    [ ] start measure on page connexion
+    [ ] sampling change
+    
 🔧 Tech Stack
 
     C++ / Arduino: Embedded logic and hardware control.
@@ -57,3 +59,11 @@ Key Features:
 Built with ☕ and extensive debugging in VS Code.
 
 
+
+
+ca marche mieux mais:
+- rework l axe y:
+- enelve le slider y scale. ne garde la formula ax+b et le slider offset.
+- ajoute un champ units (pour mettre des volat ampere ou autres)
+- j ai testé, en doublant par example A, la courbe devrait ce re-drwa et s applatir. corrige ca.
+- niveau graph, il y a une ligne horizontal au mieux qui indique par example CH1. mais elle ne bouge pas en fonction des changement d offset. cette ligne doit representer la valeur et bouger avec l offset change. corrige
