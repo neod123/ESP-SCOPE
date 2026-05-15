@@ -1,69 +1,60 @@
-🚀 ESP32 Remote ADC Monitor
+# 🚀 ESP32 Remote ADC Monitor
 
 This project turns an ESP32 into a high-performance analog signal monitor, accessible via a real-time web interface. Utilizing WebSockets, ADC data is streamed instantly to your browser, allowing for fluid data visualization without page refreshes.
-📝 Description
+## 📝 Description
 
 The system reads analog values from the ESP32 ADC pins (dynamically configured via the web UI) and broadcasts them as formatted data frames. The integrated web interface allows users to select which GPIOs to monitor on the fly.
 
-Key Features:
+## Key Features:
 
-    Backend: High-speed WebSocket server running on ESP32 for ultra-low latency.
-    Frontend: Lightweight HTML5/JavaScript interface with optimized string parsing.
-    Flexibility: Dynamic pin configuration supporting the GPIO_XX; protocol.
+Backend: High-speed WebSocket server running on ESP32 for ultra-low latency.
+Frontend: Lightweight HTML5/JavaScript interface with optimized string parsing.
+Flexibility: Dynamic pin configuration supporting the GPIO_XX; protocol.
 
-🖥️ Demo
+## 🖥️ Demo
 
-    [!IMPORTANT]
-    Live Demo coming soon!
+[!IMPORTANT]
+Live Demo coming soon!
 
-    ![Project Screenshot](Screenshot.png)
+![Project Screenshot](Screenshot.png)
 
-🛠️ Quick Start
+## 🛠️ Quick Start
 
-    Hardware: An ESP32 (DevKit V1, Olimex, or Wemos S2 Mini).
+Hardware: An ESP32 (DevKit V1, Olimex, or Wemos S2 Mini).
 
-    Software:
+## Software:
 
-        Install dependencies: WebSocketsServer library.
-        Upload the code using VS Code + PlatformIO.
+Install dependencies: WebSocketsServer library.
+Upload the code using VS Code + PlatformIO.
 
-    Connection: Connect to the IP address displayed in the Serial Monitor (e.g., 192.168.1.50) or on your router interface.
+Connection: Connect to the IP address displayed in the Serial Monitor (e.g., 192.168.1.50) or on your router interface.
 
-📋 Project Roadmap
-✅ Done
+## 📋 Project Roadmap
+### ✅ Done
 
-    [x] Hotspot or WLAN connexion available
-    [x] Initialized WebSocket server on Port 81.
-    [x] ADC pin reading implementation 
-    [x] Dynamic GPIOXX; string splitting and pin mapping system.
-    [x] Formatted data broadcasting: ADC;value;0;0;0.
-    [x] y scale should be 0 4095 fix for now
-    [x] Sending mix measurements
-    [x] X scaling should work
-    [x] Y channel offset should display the origin and a y correponding legend
+- [x] Hotspot or WLAN connexion available
+- [x] Initialized WebSocket server on Port 81.
+- [x] ADC pin reading implementation 
+- [x] Dynamic GPIOXX; string splitting and pin mapping system.
+- [x] Formatted data broadcasting: ADC;value;0;0;0.
+- [x] y scale should be 0 4095 fix for now
+- [x] Sending mix measurements
+- [x] X scaling should work
+- [x] Y channel offset should display the origin and a y correponding legend
 
-⏳ To-Do
+### ⏳ To-Do
 
-    [ ] Dynamic timebase should work
-    [ ] Y Trigger should work
-    [ ] coockie configuration
-    [ ] start measure on page connexion
-    [ ] sampling change
-    
-🔧 Tech Stack
+- [ ] Dynamic timebase should work
+- [ ] Y Trigger should work
+- [ ] coockie configuration
+- [ ] start measure on page connexion
+- [ ] sampling change
 
-    C++ / Arduino: Embedded logic and hardware control.
-    JavaScript (ES6): DOM manipulation and WebSocket management.
-    HTML5 / CSS3: Responsive user interface.
+## 🔧 Tech Stack
 
+C++ / Arduino: Embedded logic and hardware control.
+JavaScript (ES6): DOM manipulation and WebSocket management.
+HTML5 / CSS3: Responsive user interface.
+____________________________
 Built with ☕ and extensive debugging in VS Code.
 
-
-
-
-ca marche mieux mais:
-- rework l axe y:
-- enelve le slider y scale. ne garde la formula ax+b et le slider offset.
-- ajoute un champ units (pour mettre des volat ampere ou autres)
-- j ai testé, en doublant par example A, la courbe devrait ce re-drwa et s applatir. corrige ca.
-- niveau graph, il y a une ligne horizontal au mieux qui indique par example CH1. mais elle ne bouge pas en fonction des changement d offset. cette ligne doit representer la valeur et bouger avec l offset change. corrige
