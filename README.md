@@ -1,4 +1,4 @@
-# 🚀 ESP32 Remote ADC Monitor
+# 🚀 Web based ESP32 oscilloscope
 
 This project turns an ESP32 into a high-performance analog signal monitor, accessible via a real-time web interface. Utilizing WebSockets, ADC data is streamed instantly to your browser, allowing for fluid data visualization without page refreshes.
 ## 📝 Description
