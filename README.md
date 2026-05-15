@@ -19,9 +19,10 @@ Flexibility: Dynamic pin configuration supporting the GPIO_XX; protocol.
 
 ## 🛠️ Quick Start
 
-Hardware: An ESP32 (DevKit V1, Olimex, or Wemos S2 Mini).
+### Hardware: 
+An ESP32 (DevKit V1, Olimex, or Wemos S2 Mini). Tested with Olimex-Lipo
 
-## Software:
+### Software:
 
 Install dependencies: WebSocketsServer library.
 Upload the code using VS Code + PlatformIO.
